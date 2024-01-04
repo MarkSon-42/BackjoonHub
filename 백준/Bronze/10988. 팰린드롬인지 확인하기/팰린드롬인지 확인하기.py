@@ -1,8 +1,5 @@
-s = input()
-s = list(s)
+s = list(input())
 
-rev_s = []
-for i in range(len(s) - 1, -1, -1):
-    rev_s.append(s[i])
+rev_s = [s[i] for i in range(len(s) - 1, -1, -1)]
 
 print(1 if s == rev_s else 0)
