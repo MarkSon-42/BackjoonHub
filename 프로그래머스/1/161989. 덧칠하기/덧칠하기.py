@@ -1,9 +1,11 @@
-def solution(n, m, section):
-    answer = 1  # 칠하는 횟수
-    paint = section[0]  # 덧칠 시작점
-    for i in range(1, len(section)):
-        if section[i] - paint >= m:
-            answer += 1
-            paint = section[i]
+# 조건문과 반복문의 기초적인 활용을 묻는 문제라고 생각.
 
+def solution(n, m, section):
+    answer = 0
+    while section:
+        left = section[0]
+        right = left + m
+        while section and section[0] < right:
+            del section[0]
+        answer += 1
     return answer
