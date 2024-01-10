@@ -1,22 +1,20 @@
 def solution(keymap, targets):
-    result = []
+    answer = [0] * len(targets)
+    char_map = {}
 
-    exist_char = {}
-    
-    # key별 최소 key press 수 정리
-    for key_arr in keymap:
-        for i in range(len(key_arr)):
-            key = key_arr[i]
-            exist_char[key] = min(exist_char.get(key, 99999999), i + 1)
-    
-    for target in targets:
-        cnt = 0
-        for char in target:
-            if char not in exist_char:
-                cnt = -1
-                break
+    for s in keymap:
+        for i in range(len(s)):
+            key = s[i]
+            char_map[key] = min(i + 1, char_map.get(key, float('inf')))
+
+    for i in range(len(targets)):
+        s = targets[i]
+        for j in range(len(s)):
+            key = s[j]
+            if key in char_map:
+                answer[i] += char_map[key]
             else:
-                cnt += exist_char[char]
-        result.append(cnt)
-    
-    return result
+                answer[i] = -1
+                break
+
+    return answer
