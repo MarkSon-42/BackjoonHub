@@ -1,21 +1,17 @@
+from collections import deque
+
 def solution(x, y, n):
+    MAX_INT = 10 ** 6
+    dist = [-1] * (MAX_INT + 1)
+    dist[x] = 0
 
-    dp = [-1] * (y + 1)
-    dp[x] = 0
-
-
-    for i in range(x, y + 1):
-        if dp[i] == -1:
-            continue
-
-
-        if i + n <= y:
-            dp[i + n] = dp[i] + 1 if dp[i + n] == -1 else min(dp[i + n], dp[i] + 1)
-
-        if i * 2 <= y:
-            dp[i * 2] = dp[i] + 1 if dp[i * 2] == -1 else min(dp[i * 2], dp[i] + 1)
-
-        if i * 3 <= y:
-            dp[i * 3] = dp[i] + 1 if dp[i * 3] == -1 else min(dp[i * 3], dp[i] + 1)
-
-    return dp[y]
+    q = deque([x])
+    while q:
+        curr = q.popleft()
+        if curr == y:
+            return dist[curr]
+        for next in (curr + n, curr * 2, curr * 3):
+            if 0 <= next <= MAX_INT and dist[next] == -1:
+                dist[next] = dist[curr] + 1
+                q.append(next)
+    return -1
