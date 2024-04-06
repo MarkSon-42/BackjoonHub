@@ -1,12 +1,10 @@
 from collections import deque
 import sys
 
-# Define directions
 directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
-# Read input
-N, M = map(int, sys.stdin.readline().split())
-grid = [list(map(int, sys.stdin.readline().rstrip())) for _ in range(N)]
+M, N = map(int, sys.stdin.readline().split())
+grid = [list(map(int, sys.stdin.readline().rstrip())) for _ in range(M)]
 
 def bfs(x, y):
     queue = deque()
@@ -16,7 +14,7 @@ def bfs(x, y):
         x, y = queue.popleft()
 
         # If we reached the bottom row
-        if x == N - 1:
+        if x == M - 1:
             print('YES')
             exit(0)
 
@@ -24,14 +22,11 @@ def bfs(x, y):
         for dx, dy in directions:
             nx, ny = x + dx, y + dy
 
-            # If the new position is within the grid and is a white cell
-            if 0 <= nx < N and 0 <= ny < M and grid[nx][ny] == 0:
-                # Mark the cell as visited
+            if 0 <= nx < M and 0 <= ny < N and grid[nx][ny] == 0:
                 grid[nx][ny] = 1
-                # Add the new position to the queue
                 queue.append((nx, ny))
 
-for i in range(M):
+for i in range(N):  # Change here
     if grid[0][i] == 0:
         bfs(0, i)
 
