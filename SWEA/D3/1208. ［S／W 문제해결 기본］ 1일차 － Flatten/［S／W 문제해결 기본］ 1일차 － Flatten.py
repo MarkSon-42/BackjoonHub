@@ -1,10 +1,11 @@
-for i in range(1,11):
-    num=int(input())
-    a=list(map(int,input().split()))
- 
-    for _ in range(num):
-        a.sort()
-        a[0]+=1
-        a[-1]-=1
- 
-    print(f'#{i} {max(a)-min(a)}')
+t = 10
+for tc in range(1, t + 1):
+    n = int(input())
+    lst = list(map(int, input().split()))
+
+    for _ in range(n):
+        lst.sort()
+        lst[0] += 1
+        lst[-1] -= 1
+    answer = max(lst) - min(lst)
+    print(f"#{tc} {answer}")
