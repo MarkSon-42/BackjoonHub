@@ -1,13 +1,14 @@
 def solution(elements):
-    
-    # 원형 수열을 만들기 위해 elements를 두 번 복사
-    
+    n = len(elements)
     elements = elements * 2
-    l = len(elements) // 2
     numbers = set()
 
-    for i in range(l):
-        for j in range(1, l + 1):
-            numbers.add(sum(elements[i:i+j]))
+    for length in range(1, n + 1):
+        window_sum = sum(elements[:length])
+        numbers.add(window_sum)
+
+        for i in range(length, n + length):
+            window_sum = window_sum - elements[i - length] + elements[i]
+            numbers.add(window_sum)
 
     return len(numbers)
