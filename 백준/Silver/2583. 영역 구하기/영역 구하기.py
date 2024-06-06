@@ -1,15 +1,15 @@
 from collections import deque
 
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+dx = [0, 0, 1, -1]
+dy = [1, -1, 0, 0]
 
 def bfs(x, y):
-    queue = deque([(x, y)])
+    q = deque([(x, y)])
     grid[x][y] = 1
-    area = 1
+    cnt = 1
 
-    while queue:
-        x, y = queue.popleft()
+    while q:
+        x, y = q.popleft()
 
         for i in range(4):
             nx, ny = x + dx[i], y + dy[i]
@@ -18,14 +18,14 @@ def bfs(x, y):
                 continue
 
             if grid[nx][ny] == 0:
-                queue.append((nx, ny))
+                q.append((nx, ny))
                 grid[nx][ny] = 1
-                area += 1
+                cnt += 1
 
-    return area
+    return cnt
 
 M, N, K = map(int, input().split())
-grid = [[0]*N for _ in range(M)]
+grid = [[0] * N for _ in range(M)]
 areas = []
 
 for _ in range(K):
@@ -42,5 +42,5 @@ for i in range(M):
 areas.sort()
 
 print(len(areas))
-for area in areas:
-    print(area, end=' ')
+for ar in areas:
+    print(ar, end=' ')
