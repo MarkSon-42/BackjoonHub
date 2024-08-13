@@ -1,91 +1,46 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
 using namespace std;
+int t;
 
-class UnionFind {
-public:
-    UnionFind(int size) : parent(size), rank(size, 0), count(size) {
-        for (int i = 0; i < size; ++i) {
-            parent[i] = i;
-        }
-    }
+int find(int a, vector<int> &parent){
+    if(a == parent[a]) return a;
+    return find(parent[a],parent);
+}
 
-    int find(int x) {
-        if (parent[x] != x) {
-            parent[x] = find(parent[x]);
-        }
-        return parent[x];
-    }
+void unionParent(int x, int y, vector<int> &parent){
+    int a = find(x,parent);
+    int b = find(y,parent);
+    if(a < b) parent[b] = a;
+    else parent[a] = b;
+}
 
-    void unionSets(int x, int y) {
-        int rootX = find(x);
-        int rootY = find(y);
+int main(){
+    cin >> t;
+    while(t--){
+        int n,m,ans=0;
+        cin >> n >> m;
+        vector <int> parent(n + 1);
+        vector <int> graph[n + 1];
 
-        if (rootX != rootY) {
-            if (rank[rootX] > rank[rootY]) {
-                parent[rootY] = rootX;
-            } else if (rank[rootX] < rank[rootY]) {
-                parent[rootX] = rootY;
-            } else {
-                parent[rootY] = rootX;
-                rank[rootX]++;
-            }
-            count--;
-        }
-    }
+        for(int i = 1; i <= n; i++) parent[i] = i;
 
-    int getCount() const {
-        return count;
-    }
-
-private:
-    vector<int> parent;
-    vector<int> rank;
-    int count;
-};
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    int T;
-    cin >> T;
-
-    while (T--) {
-        int N, M;
-        cin >> N >> M;
-
-        vector<vector<pair<int, int>>> edges(M);
-        for (int i = 0; i < M; ++i) {
-            int a, b;
-            cin >> a >> b;
-            edges[i].push_back({a, b});
+        for(int i = 0; i < m; i++){
+            int u,v;
+            cin >> u >> v;
+            graph[u].push_back(v);
+            graph[v].push_back(u);
         }
 
-        int minAirplaneTypes = M; 
-        for (const auto& airplaneEdges : edges) {
-            UnionFind uf(N + 1); 
-
-            for (const auto& edge : airplaneEdges) {
-                int a = edge.first;
-                int b = edge.second;
-                uf.unionSets(a, b);
-            }
-
-            int components = 0;
-            for (int i = 1; i <= N; ++i) {
-                if (uf.find(i) == i) {
-                    components++;
+        for(int i  = 0 ; i < n; i++){
+            for(int j = 0; j < graph[i].size(); j++){
+                if(find(i,parent) != find(graph[i][j],parent)){
+                    unionParent(i,graph[i][j],parent);
+                    ans++;
                 }
             }
-
-            minAirplaneTypes = min(minAirplaneTypes, components);
         }
 
-        cout << minAirplaneTypes << '\n';
+        cout << ans <<'\n';
     }
-
-    return 0;
 }
