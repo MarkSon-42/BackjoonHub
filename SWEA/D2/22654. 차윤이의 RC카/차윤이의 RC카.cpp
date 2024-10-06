@@ -1,44 +1,39 @@
 #include <iostream>
-#include <vector>
 #include <string>
-
 using namespace std;
 
-struct Position {
-    int x, y;
-};
+const int MAX_N = 50; // 최대 필드 크기
+char field[MAX_N][MAX_N];
+int N;
 
-enum Direction { UP, RIGHT, DOWN, LEFT };
-
-Position moveForward(Position pos, Direction dir, int N, vector<string>& field) {
-    Position newPos = pos;
-    switch (dir) {
-        case UP: newPos.x--; break;
-        case RIGHT: newPos.y++; break;
-        case DOWN: newPos.x++; break;
-        case LEFT: newPos.y--; break;
+void moveForward(int& x, int& y, int dir) {
+    int newX = x, newY = y;
+    if (dir == 0) newX--;
+    else if (dir == 1) newY++;
+    else if (dir == 2) newX++;
+    else if (dir == 3) newY--;
+    
+    if (newX >= 0 && newX < N && newY >= 0 && newY < N && field[newX][newY] != 'T') {
+        x = newX;
+        y = newY;
     }
-    if (newPos.x >= 0 && newPos.x < N && newPos.y >= 0 && newPos.y < N && field[newPos.x][newPos.y] != 'T') {
-        return newPos;
-    }
-    return pos;
 }
 
 int main() {
     int T;
     cin >> T;
     for (int t = 1; t <= T; t++) {
-        int N;
         cin >> N;
-        vector<string> field(N);
-        Position start, end;
+        int startX, startY, endX, endY;
         for (int i = 0; i < N; i++) {
-            cin >> field[i];
             for (int j = 0; j < N; j++) {
+                cin >> field[i][j];
                 if (field[i][j] == 'X') {
-                    start = {i, j};
+                    startX = i;
+                    startY = j;
                 } else if (field[i][j] == 'Y') {
-                    end = {i, j};
+                    endX = i;
+                    endY = j;
                 }
             }
         }
@@ -49,22 +44,19 @@ int main() {
             int C;
             string commands;
             cin >> C >> commands;
-            Position pos = start;
-            Direction dir = UP;
-            for (char command : commands) {
+            int x = startX, y = startY;
+            int dir = 0; // 0: UP, 1: RIGHT, 2: DOWN, 3: LEFT
+            for (int i = 0; i < C; i++) {
+                char command = commands[i];
                 if (command == 'A') {
-                    pos = moveForward(pos, dir, N, field);
+                    moveForward(x, y, dir);
                 } else if (command == 'L') {
-                    dir = static_cast<Direction>((dir + 3) % 4);
+                    dir = (dir + 3) % 4;
                 } else if (command == 'R') {
-                    dir = static_cast<Direction>((dir + 1) % 4);
+                    dir = (dir + 1) % 4;
                 }
             }
-            if (pos.x == end.x && pos.y == end.y) {
-                cout << " 1";
-            } else {
-                cout << " 0";
-            }
+            cout << " " << (x == endX && y == endY);
         }
         cout << endl;
     }
